@@ -20,7 +20,7 @@ app.use(cookieParser());
 app.use('/uploads', express.static(__dirname+'/uploads'));
 app.use(cors({
   credentials: true,
-  origin: 'http://localhost:5174',
+  origin: 'http://localhost:5173',
 }));
 
 mongoose.connect(process.env.MONGO_URL);
@@ -115,7 +115,7 @@ app.post('/upload', photosMiddleware.array('photos',100),(req, res) => {
 })
 
   
-app.listen(4006, () => {
-  console.log('Server listening on port 4006');
+app.listen(4000, () => {
+  console.log('Server listening on port 4000');
 });
 
