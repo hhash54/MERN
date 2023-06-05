@@ -1,7 +1,8 @@
 import PhotosUploader from "../PhotosUploader";
 import Perks from "../Perks.jsx";
 import { useState } from "react";
-export default function PlacesFormpage(){
+import AccountNav from "../AccountNav";
+export default function PlacesFormPage(){
     const [title, setTitle] = useState('');
     const [address, setAddress] = useState('');
     const [addedPhotos, setAddedPhotos] = useState([]);
@@ -36,6 +37,7 @@ export default function PlacesFormpage(){
         }
     return(
         <div>
+            <AccountNav/>
             <form onSubmit={addNewPlace}>
                 {preInput('Title','title for your place. should be short and catchy')}
                 <input type="text" value={title} onChange={ev => setTitle(ev.target.value)} placeholder="title, for example: My lovely apt"/>
