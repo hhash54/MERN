@@ -1,5 +1,4 @@
 import { Link, Navigate, useParams } from "react-router-dom";
-import AccountNav from "../AccountNav";
 
 export default function PlacesPage(){
     const{action}=useParams();
