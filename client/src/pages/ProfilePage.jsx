@@ -6,7 +6,7 @@ import {useState} from 'react';
 import PlacesPage from "./PlacesPage";
 import AccountNav from "../AccountNav";
 
-export default function AccountPage(){
+export default function ProfilePage(){
     const[redirect,setRedirect] =useState(null);
     let{subpage}= useParams();
    if(subpage===undefined){
