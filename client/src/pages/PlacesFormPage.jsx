@@ -20,7 +20,9 @@ useEffect(() => {
     if(!id){
         return;
     }
-    axios.get('/places/'+id)
+    axios.get('/places/'+id).then(response => {
+        const {data}=response;
+    });
 },[id])
    
 

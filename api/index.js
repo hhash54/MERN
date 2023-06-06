@@ -140,9 +140,9 @@ app.get('/places', (req, res)=>{
   })
 })
 
-app.get('/places/:id', (req, res)=>{
-  res.json(req.params);
-
+app.get('/places/:id', async (req, res)=>{
+  const {id}=req.params;
+  res.json(await Place.findById(id));
 })
 
   
