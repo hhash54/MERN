@@ -131,7 +131,7 @@ app.post('/places', (req,res) => {
     res.json(placeDoc);
   });
 });
-app.get('/places', (req, res)=>{
+app.get('/user-places', (req, res)=>{
   const {token} = req.cookies;
 
   jwt.verify(token, jwtSecret, {}, async (err, userData) => {
@@ -168,4 +168,8 @@ app.put('/places', async (req,res) => {
 app.listen(4000, () => {
   console.log('Server listening on port 4000');
 });
+
+app.get('/places',async(req, res) => {
+  res.json(await Place.find());
+})
 
