@@ -6,6 +6,8 @@ const mongoose = require('mongoose');
 const User = require('./models/User.js');
 const bcrypt = require('bcryptjs');
 const Place=require('./models/Place.js');
+const Booking = require('./models/Booking.js');
+
 require('dotenv').config();
 const jwt= require('jsonwebtoken');
 const imageDownloader= require('image-downloader');
@@ -116,6 +118,7 @@ app.post('/upload', photosMiddleware.array('photos',100),(req, res) => {
 })
 
 app.post('/places', (req,res) => {
+  mongoose.connect(process.env.MONGO_URL);
   const {token} = req.cookies;
   const {
     title,address,addedPhotos,description,price,
@@ -124,7 +127,7 @@ app.post('/places', (req,res) => {
   jwt.verify(token, jwtSecret, {}, async (err, userData) => {
     if (err) throw err;
     const placeDoc = await Place.create({
-      owner:userData.id,
+      owner:userData.id,price,
       title,address,photos:addedPhotos,description,
       perks,extraInfo,checkIn,checkOut,maxGuests,
     });
@@ -148,7 +151,7 @@ app.put('/places', async (req,res) => {
   const {token} = req.cookies;
   const {
     id, title,address,addedPhotos,description,
-    perks,extraInfo,checkIn,checkOut,maxGuests,
+    perks,extraInfo,checkIn,checkOut,maxGuests,price,
   } = req.body;
   jwt.verify(token, jwtSecret, {}, async (err, userData) => {
     if (err) throw err;
@@ -156,12 +159,31 @@ app.put('/places', async (req,res) => {
     if (userData.id === placeDoc.owner.toString()) {
       placeDoc.set({
         title,address,photos:addedPhotos,description,
-        perks,extraInfo,checkIn,checkOut,maxGuests,
+        perks,extraInfo,checkIn,checkOut,maxGuests,price,
       });
       await placeDoc.save();
       res.json('ok');
     }
   });
+});
+
+app.post('/bookings', async (req, res) => {
+  const userData = await getUserDataFromReq(req);
+  const {
+    place,checkIn,checkOut,numberOfGuests,name,phone,price,
+  } = req.body;
+  Booking.create({
+    place,checkIn,checkOut,numberOfGuests,name,phone,price,
+    user:userData.id,
+  }).then((doc) => {
+    res.json(doc);
+  }).catch((err) => {
+    throw err;
+  });
+});
+app.get('/bookings', async (req,res) => {
+  const userData = await getUserDataFromReq(req);
+  res.json( await Booking.find({user:userData.id}).populate('place') );
 });
 
   
